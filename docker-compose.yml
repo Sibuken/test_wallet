@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./docker/nginx/:/etc/nginx/conf.d
+      - ./app:/app
+    ports:
+      - "8000:8000"
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: debug
+      MYSQL_DATABASE: debug
+      MYSQL_USER: debug
+      MYSQL_PASSWORD: debug
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+
+  web:
+    build:
+      dockerfile: ./docker/app/Dockerfile
+      args:
+        POETRY_EXPORT_EXTRA_ARGS: --dev
+    depends_on:
+      - db
+    volumes:
+      - ./app:/app
+    env_file: ./.envs/wallet.env

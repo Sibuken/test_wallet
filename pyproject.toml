@@ -1,0 +1,90 @@
+[tool.poetry]
+name = "test-wallet"
+version = "0.1.0"
+description = ""
+authors = ["sibuken <zeden123@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+gunicorn = "^21"
+pydantic = "^2"
+pydantic-settings = "^2"
+django = "^5.0.6"
+django-model-utils = "^4.3"
+django-filter = "^24"
+Collectfast = "2.2.0"
+django-debug-toolbar = "^4"
+
+djangorestframework = "^3.12"
+django-cors-headers = "^4.3.0"
+djangorestframework-jsonapi = "^7"
+
+mysqlclient = "*"
+
+sentry-sdk = "^2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1"
+flake8 = "^5.0"
+isort = "^5.12"
+pre-commit = "*"
+
+pytest = "^7.2.0"
+pytest-django = "^4.5"
+factory-boy = "*"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+line-length = 119
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+
+[tool.ruff]
+fix = true
+line-length = 119
+target-version = "py311"
+src = ["bodaybo"]
+ignore = []
+select = ["B", "C", "E", "F", "W", "B9", "I001"]
+
+[tool.ruff.flake8-bugbear]
+extend-immutable-calls = ["fastapi.File", "fastapi.Form", "fastapi.Security", "taskiq.TaskiqDepends"]
+
+[tool.ruff.mccabe]
+max-complexity = 15
+
+[tool.ruff.isort]
+known-first-party = ["core", "app"]
+force-sort-within-sections = true
+force-wrap-aliases = true
+section-order = ["future", "standard-library", "base_framework", "framework_ext", "third-party", "first-party", "local-folder"]
+lines-after-imports = 2
+
+[tool.ruff.isort.sections]
+base_framework = ["django", "fastapi", "aiohttp", "aiogram"]
+framework_ext = ["rest_framework", "starlette"]
+
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+addopts = "--nomigrations --cov=. --cov-report=html"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
