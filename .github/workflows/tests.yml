@@ -35,6 +35,15 @@ jobs:
     - name: Start Database
       run: docker compose up -d db
 
+    - name: Wait for DB to be ready
+      run: |
+        echo "Waiting for MySQL to be ready..."
+        until docker compose exec db mysqladmin ping -h "db" --silent; do
+          echo -n '.'
+          sleep 1
+        done
+        echo "MySQL is up and running!"
+
     - name: Run tests
       run: docker compose run --rm web python -m pytest .
 
