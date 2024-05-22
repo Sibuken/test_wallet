@@ -2,11 +2,11 @@ name: Run Tests
 
 on:
   push:
-    branches:
-      - main
+    branches: ["master"]
+    paths: ["app/**", ".github/workflows/tests.yml"]
   pull_request:
-    branches:
-      - main
+    types: [opened, synchronize, reopened]
+    paths: ["app/**", ".github/workflows/tests.yml"]
 
 jobs:
   build:
