@@ -7,6 +7,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths: ["app/**", ".github/workflows/tests.yml"]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -30,6 +31,9 @@ jobs:
 
     - name: Build Docker image
       run: docker compose build
+
+    - name: Start Database
+      run: docker compose up -d db
 
     - name: Run tests
       run: docker compose run --rm web python -m pytest .
